@@ -14,11 +14,57 @@ const sequelize = new Sequelize(null, null, null, {
  * Defina aqui os modelos a serem mapeados para entidades do banco de dados.
  *******/
 const Usuario = sequelize.define('usuario', {
-   // ...
+    id: {
+        primaryKey: true,
+        type: Sequelize.BIGINT,
+        autoIncrement: true,
+    },
+    nome: {
+        type: Sequelize.STRING(200),
+        allowNull: false,
+    },
+    cpf: {
+       type: Sequelize.STRING(14),
+       allowNull: false,
+       unique: true
+   },
+   senha: {
+       type: Sequelize.BLOB,
+       allowNull: false
+   },
+    nascimento: Sequelize.DATEONLY,
+    email: {
+        type: Sequelize.STRING(200),
+        unique: true,
+    }
+
+
 });
 
 const Tarefa = sequelize.define('tarefa', {
-    // ...
+    id: {
+        primaryKey: true,
+        type: Sequelize.BIGINT,
+        autoIncrement: true
+    },
+    titulo: {
+        type: Sequelize.STRING(200),
+        allowNull: false
+    },
+    descricao: {
+        type: Sequelize.TEXT
+    },
+    concluida:{
+        type: Sequelize.TINYINT,
+        defaultValue: 0
+    },
+    usuarioId: {
+        type: Sequelize.BIGINT,
+        references: {
+          model: 'usuario',
+          key: 'id'
+        }
+    }
 })
 
 /*******
@@ -27,7 +73,8 @@ const Tarefa = sequelize.define('tarefa', {
  *******/
 
 Usuario.hasMany(Tarefa, {
-    // ...
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION'
 })
 
 module.exports = {
